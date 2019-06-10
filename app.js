@@ -39,7 +39,22 @@ app.use('/img', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
-const sessionOption = {
+// const sessionOption = {
+//     resave: false,
+//     saveUninitialized: false,
+//     secret: process.env.COOKIE_SECRET,
+//     cookie: {
+//         httpOnly: true,
+//         secure: false,
+//     },
+//     store: new RedisStore({
+//         host: process.env.REDIS_HOST,
+//         port: process.env.REDIS_PORT,
+//         pass: process.env.REDIS_PASSWORD,
+//         logErrors: true,
+//     }),
+// };
+app.use(session({
     resave: false,
     saveUninitialized: false,
     secret: process.env.COOKIE_SECRET,
@@ -47,13 +62,7 @@ const sessionOption = {
         httpOnly: true,
         secure: false,
     },
-    store: new RedisStore({
-        host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT,
-        pass: process.env.REDIS_PASSWORD,
-        logErrors: true,
-    }),
-};
+}));
 app.use(flash());
 app.use(passport.initialize()); //요청(req 객체)에 passport 설정을 심는다
 app.use(passport.session()); //req.session 객체에 passport 정보를 저장
